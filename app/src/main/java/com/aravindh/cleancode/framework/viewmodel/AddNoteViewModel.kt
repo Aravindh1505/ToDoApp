@@ -4,15 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.aravindh.cleancode.framework.RoomNoteDataSource
 import com.aravindh.cleancode.framework.UseCases
 import com.aravindh.cleancode.framework.di.AppModule
 import com.aravindh.cleancode.framework.di.DaggerAppComponent
 import com.aravindh.core.data.Note
-import com.aravindh.core.repository.NoteRepository
-import com.aravindh.core.usecase.AddNoteUseCase
-import com.aravindh.core.usecase.DeleteNoteUseCase
-import com.aravindh.core.usecase.GetNoteUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
