@@ -1,14 +1,16 @@
 package com.aravindh.cleancode.framework
 
 import android.content.Context
+import com.aravindh.cleancode.framework.db.NoteDao
 import com.aravindh.cleancode.framework.db.NoteDatabase
 import com.aravindh.cleancode.framework.db.NoteEntity
 import com.aravindh.core.data.Note
 import com.aravindh.core.repository.NoteDataSource
+import javax.inject.Inject
 
-class RoomNoteDataSource(context: Context) : NoteDataSource {
-
-    private val noteDao = NoteDatabase.create(context).noteDao()
+class RoomNoteDataSource @Inject constructor(
+    private val noteDao: NoteDao
+) : NoteDataSource {
 
     override suspend fun addNote(note: Note) = noteDao.addNote(NoteEntity.fromNote(note))
 

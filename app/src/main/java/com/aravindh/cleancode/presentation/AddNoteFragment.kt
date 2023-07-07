@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.aravindh.cleancode.R
@@ -15,13 +16,15 @@ import com.aravindh.cleancode.databinding.FragmentAddNoteBinding
 import com.aravindh.cleancode.framework.viewmodel.AddNoteViewModel
 import com.aravindh.cleancode.util.Utils
 import com.aravindh.core.data.Note
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class AddNoteFragment : Fragment() {
 
     private lateinit var binding: FragmentAddNoteBinding
 
-    private lateinit var viewModel: AddNoteViewModel
+    private val viewModel: AddNoteViewModel by viewModels()
 
     private var currentNote = Note(title = "", content = "", creationTime = 0L, updateTime = 0L)
 
@@ -41,10 +44,7 @@ class AddNoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this)[AddNoteViewModel::class.java]
         observeViewModel()
-
-
         arguments?.let {
             val id = AddNoteFragmentArgs.fromBundle(it).noteId
             if (id != 0L) {

@@ -5,19 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aravindh.cleancode.databinding.FragmentNoteListBinding
 import com.aravindh.cleancode.framework.viewmodel.NoteListViewModel
 import com.aravindh.cleancode.presentation.adapter.NoteListAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class NoteListFragment : Fragment(), NoteClickAction {
 
     private lateinit var binding: FragmentNoteListBinding
 
-    private lateinit var viewModel: NoteListViewModel
+    private val viewModel: NoteListViewModel by viewModels()
 
     private val noteListAdapter = NoteListAdapter(arrayListOf(), this)
 
@@ -38,7 +41,7 @@ class NoteListFragment : Fragment(), NoteClickAction {
             adapter = noteListAdapter
         }
 
-        viewModel = ViewModelProviders.of(this)[NoteListViewModel::class.java]
+        //viewModel = ViewModelProviders.of(this)[NoteListViewModel::class.java]
         observeViewModel()
 
         binding.addNote.setOnClickListener {

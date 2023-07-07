@@ -1,31 +1,21 @@
 package com.aravindh.cleancode.framework.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.aravindh.cleancode.framework.UseCases
-import com.aravindh.cleancode.framework.di.AppModule
-import com.aravindh.cleancode.framework.di.DaggerAppComponent
 import com.aravindh.core.data.Note
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class NoteListViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
-    @Inject
-    lateinit var useCases: UseCases
-
-    init {
-        DaggerAppComponent.builder()
-            .appModule(AppModule(getApplication()))
-            .build()
-            .inject(this)
-    }
+@HiltViewModel
+class NoteListViewModel @Inject constructor(
+    private val useCases: UseCases,
+    private val coroutineScope: CoroutineScope
+) : ViewModel() {
 
     private var _notes = MutableLiveData<List<Note>>()
     val notes: LiveData<List<Note>> = _notes

@@ -9,20 +9,5 @@ import androidx.room.RoomDatabase
 abstract class NoteDatabase : RoomDatabase() {
 
     abstract fun noteDao() : NoteDao
-
-    companion object {
-        private const val DATABASE_NAME = "note.db"
-
-        private var instance: NoteDatabase? = null
-
-        fun create(context: Context): NoteDatabase {
-            return Room.databaseBuilder(context, NoteDatabase::class.java, DATABASE_NAME)
-                .fallbackToDestructiveMigration()
-                .build()
-        }
-
-        fun getInstance(context: Context): NoteDatabase {
-            return (instance ?: create(context).also { instance = it })
-        }
-    }
+    
 }
