@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aravindh.cleancode.framework.RoomNoteDataSource
 import com.aravindh.cleancode.framework.UseCases
+import com.aravindh.cleancode.framework.di.AppModule
+import com.aravindh.cleancode.framework.di.DaggerAppComponent
 import com.aravindh.core.data.Note
 import com.aravindh.core.repository.NoteRepository
 import com.aravindh.core.usecase.AddNoteUseCase
@@ -14,18 +16,21 @@ import com.aravindh.core.usecase.GetNoteUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class AddNoteViewModel(application: Application) : AndroidViewModel(application) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private val noteRepository = NoteRepository(RoomNoteDataSource(application))
+    @Inject
+    lateinit var useCases: UseCases
 
-    private val useCases = UseCases(
-        addNoteUseCase = AddNoteUseCase(noteRepository),
-        getNoteUseCase = GetNoteUseCase(noteRepository),
-        deleteNoteUseCase = DeleteNoteUseCase(noteRepository)
-    )
+    init {
+        DaggerAppComponent.builder()
+            .appModule(AppModule(getApplication()))
+            .build()
+            .inject(this)
+    }
 
     private var _isSaved = MutableLiveData<Boolean>()
     val isSaved: LiveData<Boolean> = _isSaved
