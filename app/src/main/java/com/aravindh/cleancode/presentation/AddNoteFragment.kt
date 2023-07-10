@@ -26,8 +26,6 @@ class AddNoteFragment : Fragment() {
 
     private val viewModel: AddNoteViewModel by viewModels()
 
-    private var currentNote = Note(title = "", content = "", creationTime = 0L, updateTime = 0L)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -43,6 +41,8 @@ class AddNoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
         observeViewModel()
         arguments?.let {
@@ -51,55 +51,37 @@ class AddNoteFragment : Fragment() {
                 viewModel.getNote(id)
             }
         }
-
-        binding.saveNote.setOnClickListener {
-            saveNote()
-        }
     }
 
-    private fun saveNote() {
-        val title = binding.title.text.toString()
-        val content = binding.content.text.toString()
-        val time = System.currentTimeMillis()
-        var creationTime = time
-
-        if (title.trim().equals("", ignoreCase = true)) {
-            Utils.showToast(context, "Title should not be empty!")
-            return
-        }
-
-        if (content.trim().equals("", ignoreCase = true)) {
-            Utils.showToast(context, "Content should not be empty!")
-            return
-        }
-
-        if (currentNote.id != 0L) {
-            creationTime = currentNote.creationTime
-        }
-
-        currentNote =
-            Note(
-                title = title, content = content, creationTime = creationTime, updateTime =
-                time, id = currentNote.id
-            )
-        viewModel.saveNote(currentNote)
-    }
 
     private fun observeViewModel() {
-        viewModel.isSaved.observe(viewLifecycleOwner) { isSaved ->
-            if (isSaved) {
-                Utils.showToast(context, "Note saved successfully!")
-                Utils.popBackStack(binding.title)
-            } else {
-                Utils.showToast(context, "Sorry, Something went wrong!")
+        viewModel.isSaved.observe(viewLifecycleOwner) { status ->
+            when (status) {
+                AddNoteViewModel.STATUS.ADD -> {
+                    Utils.showToast(context, "Note added successfully!")
+                    Utils.popBackStack(binding.title)
+                }
+
+                AddNoteViewModel.STATUS.UPDATE -> {
+                    Utils.showToast(context, "Note updated successfully!")
+                    Utils.popBackStack(binding.title)
+                }
+
+                AddNoteViewModel.STATUS.DELETE -> {
+                    Utils.showToast(context, "Note deleted successfully!")
+                    Utils.popBackStack(binding.title)
+                }
+
+                else -> {
+                }
             }
         }
 
-        viewModel.note.observe(viewLifecycleOwner) { note ->
-            note?.let {
-                currentNote = it
-                binding.title.setText(currentNote.title)
-                binding.content.setText(currentNote.content)
+        viewModel.errorMessage.observe(viewLifecycleOwner) {
+            it?.let { message ->
+                if (message.isNotEmpty()) {
+                    Utils.showToast(context, message)
+                }
             }
         }
     }
@@ -111,9 +93,7 @@ class AddNoteFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.deleteNote) {
-            if (currentNote.id != 0L) {
-                viewModel.deleteNote(currentNote)
-            }
+            viewModel.deleteNote()
         }
         return true
     }

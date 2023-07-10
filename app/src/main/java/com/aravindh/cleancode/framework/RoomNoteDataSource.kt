@@ -1,8 +1,6 @@
 package com.aravindh.cleancode.framework
 
-import android.content.Context
 import com.aravindh.cleancode.framework.db.NoteDao
-import com.aravindh.cleancode.framework.db.NoteDatabase
 import com.aravindh.cleancode.framework.db.NoteEntity
 import com.aravindh.core.data.Note
 import com.aravindh.core.repository.NoteDataSource
