@@ -1,5 +1,19 @@
 package com.aravindh.cleancode.programs
 
+
+fun main() {
+
+    val networkRequestDelegateImpl = NetworkRequestDelegateImpl()
+
+    networkRequestDelegateImpl.performNetworkRequest("",
+        onSuccess = {
+            println(it)
+        }, onError = {
+            println(it)
+        })
+
+}
+
 interface NetworkRequestDelegate {
 
     fun performNetworkRequest(url: String?, onSuccess: (String) -> Unit, onError: (String) -> Unit)
