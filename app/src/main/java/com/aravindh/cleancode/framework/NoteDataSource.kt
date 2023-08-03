@@ -6,7 +6,7 @@ import com.aravindh.core.data.Note
 import com.aravindh.core.repository.NoteDataSource
 import javax.inject.Inject
 
-class RoomNoteDataSource @Inject constructor(
+class NoteDataSource @Inject constructor(
     private val noteDao: NoteDao
 ) : NoteDataSource {
 

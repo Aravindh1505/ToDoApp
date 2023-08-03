@@ -2,7 +2,7 @@ package com.aravindh.cleancode.framework.di
 
 import android.content.Context
 import androidx.room.Room
-import com.aravindh.cleancode.framework.RoomNoteDataSource
+import com.aravindh.cleancode.framework.NoteDataSource
 import com.aravindh.cleancode.framework.UseCases
 import com.aravindh.cleancode.framework.db.NoteDao
 import com.aravindh.cleancode.framework.db.NoteDatabase
@@ -27,7 +27,7 @@ class AppModule {
     @Singleton
     @Provides
     fun provideNoteRepository(noteDao: NoteDao) =
-        NoteRepository(RoomNoteDataSource(noteDao))
+        NoteRepository(NoteDataSource(noteDao))
 
     @Singleton
     @Provides

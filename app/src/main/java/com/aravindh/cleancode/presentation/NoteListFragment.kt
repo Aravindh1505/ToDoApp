@@ -1,18 +1,18 @@
 package com.aravindh.cleancode.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aravindh.cleancode.databinding.FragmentNoteListBinding
 import com.aravindh.cleancode.framework.viewmodel.NoteListViewModel
 import com.aravindh.cleancode.presentation.adapter.NoteListAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
 
 
 @AndroidEntryPoint
@@ -28,7 +28,6 @@ class NoteListFragment : Fragment(), NoteClickAction {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //return inflater.inflate(R.layout.fragment_list, container, false)
         binding = FragmentNoteListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,14 +35,17 @@ class NoteListFragment : Fragment(), NoteClickAction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val guid = UUID.randomUUID().toString()
+        println("GUID: $guid")
+
+
+
         binding.addNoteListView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = noteListAdapter
         }
 
-        //viewModel = ViewModelProviders.of(this)[NoteListViewModel::class.java]
         observeViewModel()
-
         binding.addNote.setOnClickListener {
             gotoAddNote()
         }
